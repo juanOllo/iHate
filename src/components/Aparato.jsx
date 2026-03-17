@@ -1,6 +1,7 @@
 import React from "react";
 // import albumCover from "../temp/crystal-castles-album-1.jpg";
 // import cancion from "../temp/Kerosene.mp3";
+import PlayerScreen from "./PlayerScreen.jsx"
 
 class Aparato extends React.Component {
     constructor(props) {
@@ -29,6 +30,10 @@ class Aparato extends React.Component {
         audio.addEventListener("loadedmetadata", () => {
             this.forceUpdate(); // para que el max del input se actualice
         });
+
+        audio.addEventListener("ended", () => {
+            this.playNextSong();
+        })
 
         this.setState({
             songs: [
@@ -70,59 +75,84 @@ class Aparato extends React.Component {
 
 
     playSong(index){
+        let currentSong = this.state.currentSong || null;
+
         if (!this.state.currentSong) {
-            this.state.currentSong = this.state.songs[0];
+            currentSong = this.state.songs[0];
         } else if(index >= 0){
-            this.state.currentSong = this.state.songs[index];
+            currentSong = this.state.songs[index];
         }
 
-        this.state.isPlayingSong = true;
-        this.state.audio.src = this.state.currentSong.src;
-        // this.state.audio.title = this.state.currentSong.title;
-        this.state.audio.currentTime = this.state.currentSongCurrentTime || 0;
+        const audio = this.state.audio;
+        audio.src = currentSong.src;
+        audio.currentTime = this.state.currentSongCurrentTime || 0;
 
-        this.state.audio.play();
+        this.setState({
+            currentSong,
+            isPlayingSong: true,
+            audio,
+        }, () => {
+            setTimeout(() => {
+                this.state.audio.play();
+            }, 100);
+        })
     }
 
     pauseSong(){
-        this.state.isPlayingSong = false;
-        this.state.currentSongCurrentTime= this.state.audio.currentTime;
+        this.setState({
+            isPlayingSong: false,
+            currentSongCurrentTime:this.state.audio.currentTime,
+        })
 
         this.state.audio.pause();
     }
 
-    prevSong(){
-        if (this.state.audio.currentTime < 10 && this.state.songs.indexOf(this.state.currentSong) > 0) {
-            this.state.currentSongCurrentTime = 0;
-            this.state.audio.currentTime = 0;
-            this.playSong(this.state.songs.indexOf(this.state.currentSong) - 1);
-
-            const tapa = document.getElementById("screen-tapa");
-            tapa.style.animation = "screen-tapa-disappear 0.6s ease-in-out 0s forwards";
-            setTimeout(() => {
-                this.state.currentSongCoverIndex = this.state.currentSong.album - 1;
-                tapa.style.animation = "screen-tapa-appear 0.6s ease-in-out 0.1s forwards";
-            }, 700);
-        } else {
-            this.state.currentSongCurrentTime = 0;
-            this.state.audio.currentTime = 0;
-        }
-    }
-
-    nextSong(){
+    playNextSong(){
         if (!this.state.currentSong) {
             return;
         } else if (this.state.songs.indexOf(this.state.currentSong) < (this.state.songs.length - 1)) {
-            this.state.currentSongCurrentTime = 0;
-            this.state.audio.currentTime = 0;
-            this.playSong(this.state.songs.indexOf(this.state.currentSong) + 1);
+            this.setState({
+                currentSongCurrentTime: 0,
+            }, () => {
+                this.playSong(this.state.songs.indexOf(this.state.currentSong) + 1);
+            })
 
-            const tapa = document.getElementById("screen-tapa");
-            tapa.style.animation = "screen-tapa-disappear 0.6s ease-in-out 0s forwards";
+            const cover = document.getElementById("screen-cover");
+            cover.style.animation = "screen-cover-disappear-to-left 0.5s ease-in-out 0s forwards";
             setTimeout(() => {
-                this.state.currentSongCoverIndex = this.state.currentSong.album - 1;
-                tapa.style.animation = "screen-tapa-appear 0.6s ease-in-out 0.1s forwards";
-            }, 700);
+                this.setState({
+                    currentSongCoverIndex: this.state.currentSong.album - 1,
+                }, () => {
+                    cover.style.animation = "screen-cover-appear-from-right 0.5s ease-in-out 0.15s forwards";
+                })
+            }, 500);
+        }
+    }
+
+    playPrevSong(){
+        if (this.state.audio.currentTime < 10 && this.state.songs.indexOf(this.state.currentSong) > 0) {
+            this.setState({
+                currentSongCurrentTime: 0,
+            }, () => {
+                this.playSong(this.state.songs.indexOf(this.state.currentSong) - 1);
+            })
+
+            const cover = document.getElementById("screen-cover");
+            cover.style.animation = "screen-cover-disappear-to-right 0.5s ease-in-out 0s forwards";
+            setTimeout(() => {
+                this.setState({
+                    currentSongCoverIndex: this.state.currentSong.album - 1,
+                }, () => {
+                    cover.style.animation = "screen-cover-appear-from-left 0.5s ease-in-out 0.15s forwards";
+                })
+            }, 500);
+            
+        } else {
+            this.setState({
+                currentSongCurrentTime: 0,
+            }, () => {
+                this.playSong();
+            })
         }
     }
 
@@ -131,31 +161,27 @@ class Aparato extends React.Component {
             <div className="aparato">
                 <div className="screen">
                     {
-                        this.state.currentSong ? 
-                            <img id="screen-tapa" className="screen-tapa" src={this.state.covers[this.state.currentSongCoverIndex]} alt="cover" />
+                        this.state.currentSong ?
+                            <PlayerScreen
+                                cover={this.state.covers[this.state.currentSongCoverIndex]}
+                                currentSongCurrentTime={this.state.currentSongCurrentTime}
+                                duration={this.state.audio.duration}
+                                title={this.state.currentSong?.title}
+                                handleSeek={this.handleSeek}
+                            />
                             :
-                            <div style={{width: "100%", height: "100%"}} alt="cover" />
+                            null
                     }
-                    <div className="screen-title">
-                        <input className="progress-bar"
-                            type="range"
-                            value={this.state.currentSongCurrentTime}
-                            min="0"
-                            max={this.state.audio.duration || 0}
-                            onChange={this.handleSeek}
-                        />
-                        <p>{this.state.currentSong?.title || "."}</p>
-                    </div>
                 </div>
                 <div className="pad">
                     <button className="menu-btn">MENU</button>
                     
                     <button className="prev-btn"
-                        onClick={() => this.prevSong()}
+                        onClick={() => this.playPrevSong()}
                     >PREV</button>
                     
                     <button className="next-btn"
-                        onClick={() => this.nextSong()}
+                        onClick={() => this.playNextSong()}
                     >NEXT</button>
                     
                     <button className="play-pause-btn"
