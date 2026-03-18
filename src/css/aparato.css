@@ -1,235 +1,77 @@
-.aparato{
-    background-color: gray;
-    margin-left: 50svw;
-    transform: translate(-50%, 0);
-    border-radius: 1.5rem;
-
-    height: 100svh;
-    width: 25rem;
-    max-width: 100svw;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-
-    overflow: hidden;
-
-    /* background: linear-gradient(145deg, #d9d9d9, #a6a6a6); */
-    background: linear-gradient(145deg, #d9d9d9, #959595);
-    /* box-shadow: inset -2px -2px 5px #ffffff, inset 2px 2px 5px #7d7d7d; */
-    box-shadow: inset -4px -4px 20px #ffffff, inset 8px 8px 20px #7d7d7d;
-
-    /* opacity: 0.7; */
-}
-
-.screen{
-    width: 20rem;
-    height: 20rem;
-    background-color: black;
-    border: 2px solid rgba(255, 255, 255, 0.6);
-    border-radius: 0.3rem;
-    overflow: hidden;
-}
-
-.screen-cover{
+.menu-screen{
     width: 100%;
     height: 100%;
-    opacity: 0;
-
-    animation: screen-cover-appear-from-right 0.5s ease-in-out 0s forwards;
-    scale: 0.95;
-}
-
-@keyframes screen-cover-appear-from-right {
-    0%{
-        scale: 0.4;
-        transform: translate(90%, 0);
-        opacity: 0;
-    }
-    40%{
-        scale: 0.4;
-    }
-    100%{
-        opacity: 1;
-    }
-}
-
-@keyframes screen-cover-appear-from-left {
-    0%{
-        scale: 0.4;
-        transform: translate(-90%, 0);
-        opacity: 0;
-    }
-    40%{
-        scale: 0.4;
-    }
-    100%{
-        opacity: 1;
-    }
-}
-
-@keyframes screen-cover-disappear-to-left {
-    0%{
-        opacity: 1;
-    }
-    60%{
-        scale: 0.4;
-    }
-    100%{
-        scale: 0.4;
-        transform: translate(-90%, 0);
-        opacity: 0;
-    }
-}
-
-@keyframes screen-cover-disappear-to-right {
-    0%{
-        opacity: 1;
-    }
-    60%{
-        scale: 0.4;
-    }
-    100%{
-        scale: 0.4;
-        transform: translate(90%, 0);
-        opacity: 0;
-    }
-}
-
-.screen-title{
-    background-color: rgba(0, 0, 0, 0.5);
-    position: relative;
-    height: 3rem;
-    top: -3rem;
+    background-color: white;
+    scale: 0.90;
 
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
+    align-items: center;
+    gap: 0.3rem;
+    opacity: 0;
+
+    animation: menu-screen-appear 0.5s ease-in-out 0s forwards;
+}
+
+@keyframes menu-screen-appear {
+    100%{
+        opacity: 1;
+    }   
+}
+
+@keyframes menu-screen-disappear {
+    0%{
+        opacity: 1;
+    }   
+    100%{
+        /* transform: rotate(360deg); */
+        opacity: 0.5;
+        /* scale: 0.1; */
+        transform: translate(0, 120%);
+    }   
+}
+
+.menu-header{
+    /* background-color: red; */
+    width: 90%;
+    padding: 0.3rem;
+    /* height: 2rem; */
+    border-bottom: 3px solid black;
+}
+
+.menu-options{
+    /* background-color: red; */
+    padding: 0.4rem;
+    width: 90%;
+    /* text-align: start; */
+
+    display: flex;
+    justify-content: space-between;
     align-items: center;
 }
 
-.progress-bar{
-    width: 90%;
-    height: 3px;
-    margin: -1.1rem 0 0.5rem;
-    
-    -webkit-appearance: none; /* quita el estilo por defecto en Chrome/Safari */
-    height: 6px;
-    background: #ccc;
-    border-radius: 5px;
-    outline: none;
-    cursor: pointer;
-}
-
-/* Estilo del "thumb" (el circulito que se arrastra) en Chrome/Safari */
-.progress-bar::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 9px;
-    height: 9px;
-
-    /* clip-path: polygon(
-        50% 0%, 61% 35%, 98% 35%, 
-        68% 57%, 79% 91%, 50% 70%, 
-        21% 91%, 32% 57%, 2% 35%, 
-        39% 35%
-    ); */
-
-    border-radius: 50%;
-    /* background: #ff4081; */
-    background: gray;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.progress-bar::-webkit-slider-thumb:hover {
-    /* background: #e91e63; */
-    background: darkgrey;
-}
-
-/* Firefox */
-.progress-bar::-moz-range-thumb {
-    width: 14px;
-    height: 14px;
-
-    /* clip-path: polygon(
-        50% 0%, 61% 35%, 98% 35%, 
-        68% 57%, 79% 91%, 50% 70%, 
-        21% 91%, 32% 57%, 2% 35%, 
-        39% 35%
-    ); */
-
-    border-radius: 50%;
-    background: #ff4081;
-    border: none;
-    cursor: pointer;
-}
-
-/* Estilo de la pista en Firefox */
-.progress-bar::-moz-range-track {
-    background: #ccc;
-    height: 6px;
-    border-radius: 5px;
-}
-
-.screen-title p{
+.focused-option{
+    /* background-color: gray; */
+    background: linear-gradient(rgb(131, 131, 236) 0%, rgb(131, 131, 236) 30%, black 100%);
     color: white;
-    margin: 0;
-
-    font-family: "Cascadia Mono", sans-serif;
-    /* font-optical-sizing: auto; */
-    font-weight: 300;
-    font-style: normal;
-
+    border-radius: 3px;
 }
 
-.pad{
-    width: 0;
-    height: 0;
-    background-color: red;
-    border: 9.5rem solid rgb(228, 227, 227);
-    border-radius: 50%;
-
-    scale: 0.9;
+.menu-cover-img{
+    width: 2rem;
+    height: 2rem;
 }
 
-.pad button{
-    position: relative;
-    height: 5rem;
-    width: 5rem;
-    border: none;
-    scale: 1.2;
+.menu-album-checkout{
+    width: 0.7rem;
+    height: 0.7rem;
+    background-color: white;
+    border-radius: 1px;
+    border: 1px solid black;
+    margin-right: 0.2rem;
 }
 
-.menu-btn{
-    top: -9rem;
-    left: -2.5rem;
-    background-color: transparent;
-}
-
-.prev-btn{
-    top: -7.5rem;
-    left: -9rem;
-    background-color: transparent;
-}
-
-.play-pause-btn{
-    top: -17.5rem;
-    left: -2.5rem;
-    background-color: lightgrey;
-    border-radius: 50%;
-}
-
-.next-btn{
-    top: -12.5rem;
-    left: 4rem;
-    background-color: transparent;
-}
-
-.mix-btn{
-    top: -16rem;
-    left: -2.5rem;
-    background-color: transparent;
+.menu-album-checkout-selected{
+    background-color: black;
 }

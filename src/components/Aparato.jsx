@@ -1,40 +1,28 @@
-import React from "react";
-// import albumCover from "../temp/crystal-castles-album-1.jpg";
-// import cancion from "../temp/Kerosene.mp3";
-import PlayerScreen from "./PlayerScreen.jsx"
+import React, { useEffect } from "react";
+import Player from "./Player.jsx"
+import MainMenu from "./MainMenu.jsx";
+import SelectAlbumsMenu from "./SelectAlbumsMenu.jsx";
 
-class Aparato extends React.Component {
+class Menu extends React.Component {
+
     constructor(props) {
         super(props);
 
-        this.audioRef = React.createRef();
-
         this.state={
-            audio: new Audio(),
+            playerDisplay: false,
             songs: [],
+            playlist: [],
             covers: [],
-            currentSong: null,
-            currentSongCurrentTime: 0,
-            currentSongCoverIndex: 0,
-            isPlayingSong: false,
+
+            focusOptionIndex: 0,
+            actualMenuIndex: 0,
+
+            albumsFilter: [true, true, true],
         }
+
     }
 
-    componentDidMount() {
-        const audio = this.state.audio;
-
-        audio.addEventListener("timeupdate", () => {
-            this.setState({ currentSongCurrentTime: audio.currentTime });
-        });
-
-        audio.addEventListener("loadedmetadata", () => {
-            this.forceUpdate(); // para que el max del input se actualice
-        });
-
-        audio.addEventListener("ended", () => {
-            this.playNextSong();
-        })
-
+    componentDidMount(){
         this.setState({
             songs: [
                 {
@@ -58,148 +46,136 @@ class Aparato extends React.Component {
         });
     }
 
-    handleTimeUpdate = () => {
-        this.setState({ currentSongCurrentTime: this.audioRef.current.currentTime });
-    };
+    closePlayer = () => {
+        this.setState({ playerDisplay: false });
+    }
 
-    // handleLoadedMetadata = () => {
-    //     this.setState({ duration: this.audioRef.current.duration });
-    // };
+    chooseOption(){
+        switch (this.state.actualMenuIndex) {
+            case 0:
+                switch (this.state.focusOptionIndex) {
+                    case 0:
+                        // const playlist = [...this.state.songs];
 
-    handleSeek = (e) => {
-        const newTime = e.target.value;
-        // this.audioRef.current.currentTime = newTime;
-        this.state.audio.currentTime = newTime;
-        this.setState({ currentSongCurrentTime: newTime });
-    };
+                        if (!this.state.albumsFilter.every(valor => valor === true)) {
+                            const playlist = this.state.songs.filter(elem => this.state.albumsFilter[elem.album-1]);
+                            console.log("playlist filtrada: ", playlist);
+                            this.setState({ playlist: [...playlist] });
+                        } else {
+                            this.setState({ playlist: this.state.songs })
+                        }
+                        const menuScreen = document.getElementById("menu-screen");
+                        menuScreen.style.animation = "menu-screen-disappear 0.5s ease-in-out 0s forwards";
+                        setTimeout(() => {
+                            this.setState({ playerDisplay: true });
+                        }, 510);
+                        break;
 
+                    case 1:
+                        this.setState({ actualMenuIndex: 1 });
+                        break;
+                
+                    default:
+                        break;
+                }
+                
+                break;
 
-    playSong(index){
-        let currentSong = this.state.currentSong || null;
+            case 1:
+                const newList = this.state.albumsFilter;
+                switch (this.state.focusOptionIndex) {
+                    case 0:
+                        console.log("entro en: ", this.state.focusOptionIndex)
+                        newList[this.state.focusOptionIndex] = !newList[this.state.focusOptionIndex];
+                        this.setState({ albumsFilter: [...newList]});
+                        break;
 
-        if (!this.state.currentSong) {
-            currentSong = this.state.songs[0];
-        } else if(index >= 0){
-            currentSong = this.state.songs[index];
+                    case 1:
+                        console.log("entro en: ", this.state.focusOptionIndex)
+                        newList[this.state.focusOptionIndex] = !newList[this.state.focusOptionIndex];
+                        this.setState({ albumsFilter: [...newList]});
+                        break;
+
+                    case 2:
+                        console.log("entro en: ", this.state.focusOptionIndex)
+                        newList[this.state.focusOptionIndex] = !newList[this.state.focusOptionIndex];
+                        this.setState({ albumsFilter: [...newList]});
+                        break;
+                
+                    default:
+                        break;
+                }
+
+                break;
+        
+            default:
+                break;
         }
 
-        const audio = this.state.audio;
-        audio.src = currentSong.src;
-        audio.currentTime = this.state.currentSongCurrentTime || 0;
-
-        this.setState({
-            currentSong,
-            isPlayingSong: true,
-            audio,
-        }, () => {
-            setTimeout(() => {
-                this.state.audio.play();
-            }, 100);
-        })
     }
 
-    pauseSong(){
-        this.setState({
-            isPlayingSong: false,
-            currentSongCurrentTime:this.state.audio.currentTime,
-        })
+    returnMenuDisplay(){
+        switch (this.state.actualMenuIndex) {
+            case 0:
+                return <MainMenu focusOptionIndex={this.state.focusOptionIndex}/>
 
-        this.state.audio.pause();
-    }
+            case 1:
+                return <SelectAlbumsMenu 
+                    focusOptionIndex={this.state.focusOptionIndex}
+                    albumsFilter={this.state.albumsFilter}
+                />
+                break;
 
-    playNextSong(){
-        if (!this.state.currentSong) {
-            return;
-        } else if (this.state.songs.indexOf(this.state.currentSong) < (this.state.songs.length - 1)) {
-            this.setState({
-                currentSongCurrentTime: 0,
-            }, () => {
-                this.playSong(this.state.songs.indexOf(this.state.currentSong) + 1);
-            })
-
-            const cover = document.getElementById("screen-cover");
-            cover.style.animation = "screen-cover-disappear-to-left 0.5s ease-in-out 0s forwards";
-            setTimeout(() => {
-                this.setState({
-                    currentSongCoverIndex: this.state.currentSong.album - 1,
-                }, () => {
-                    cover.style.animation = "screen-cover-appear-from-right 0.5s ease-in-out 0.15s forwards";
-                })
-            }, 500);
-        }
-    }
-
-    playPrevSong(){
-        if (this.state.audio.currentTime < 10 && this.state.songs.indexOf(this.state.currentSong) > 0) {
-            this.setState({
-                currentSongCurrentTime: 0,
-            }, () => {
-                this.playSong(this.state.songs.indexOf(this.state.currentSong) - 1);
-            })
-
-            const cover = document.getElementById("screen-cover");
-            cover.style.animation = "screen-cover-disappear-to-right 0.5s ease-in-out 0s forwards";
-            setTimeout(() => {
-                this.setState({
-                    currentSongCoverIndex: this.state.currentSong.album - 1,
-                }, () => {
-                    cover.style.animation = "screen-cover-appear-from-left 0.5s ease-in-out 0.15s forwards";
-                })
-            }, 500);
-            
-        } else {
-            this.setState({
-                currentSongCurrentTime: 0,
-            }, () => {
-                this.playSong();
-            })
+            default:
+                break;
         }
     }
 
     render(){
+
+        if (this.state.playerDisplay) {
+            return(
+                <Player
+                    closePlayer={this.closePlayer}
+                    songs={this.state.playlist}
+                    covers={this.state.covers}
+                ></Player>
+            )
+        }
+
         return(
-            <div className="aparato">
+            <div className="aparato menu">
                 <div className="screen">
                     {
-                        this.state.currentSong ?
-                            <PlayerScreen
-                                cover={this.state.covers[this.state.currentSongCoverIndex]}
-                                currentSongCurrentTime={this.state.currentSongCurrentTime}
-                                duration={this.state.audio.duration}
-                                title={this.state.currentSong?.title}
-                                handleSeek={this.handleSeek}
-                            />
-                            :
-                            null
+                        this.returnMenuDisplay()
                     }
                 </div>
                 <div className="pad">
-                    <button className="menu-btn">MENU</button>
+                    <button className="menu-btn"
+                        onClick={() => this.setState({ focusOptionIndex: this.state.focusOptionIndex-1})}
+                    >UP</button>
                     
                     <button className="prev-btn"
-                        onClick={() => this.playPrevSong()}
-                    >PREV</button>
+                        onClick={() => this.setState({ actualMenuIndex: 0 })}
+                    >BACK</button>
                     
                     <button className="next-btn"
-                        onClick={() => this.playNextSong()}
-                    >NEXT</button>
+                    >SEL</button>
                     
                     <button className="play-pause-btn"
-                        onClick={() => {
-                            if (!this.state.isPlayingSong) {
-                                this.playSong();
-                            } else {
-                                this.pauseSong();
-                            }
-                        }}
-                    >P/P</button>
+                        onClick={() => this.chooseOption()}
+                    >OK</button>
                     
-                    <button className="mix-btn">MIX</button>
+                    <button className="mix-btn"
+                        onClick={() => this.setState({ focusOptionIndex: this.state.focusOptionIndex+1})}
+                    >DOWN</button>
                     
                 </div>
             </div>
         )
+
     }
+
 }
 
-export default Aparato;
+export default Menu;

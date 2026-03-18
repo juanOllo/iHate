@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import Aparato from './components/Aparato';
+import Aparato from './components/Aparato.jsx';
 
 function App() {
   return (
