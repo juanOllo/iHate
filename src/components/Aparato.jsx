@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Player from "./Player.jsx"
 import MainMenu from "./MainMenu.jsx";
 import SelectAlbumsMenu from "./SelectAlbumsMenu.jsx";
+import MenuSongs from "./MenuSongs.jsx";
 
 class Menu extends React.Component {
 
@@ -9,6 +10,8 @@ class Menu extends React.Component {
         super(props);
 
         this.state={
+            audio: new Audio(),
+
             playerDisplay: false,
             songs: [],
             playlist: [],
@@ -18,6 +21,10 @@ class Menu extends React.Component {
             actualMenuIndex: 0,
 
             albumsFilter: [true, true, true],
+            top: 3, //Cambiar nombre
+
+            lastSongPlayed: null,
+            lastSongPlayedCurrentTime: 0,
         }
 
     }
@@ -33,6 +40,48 @@ class Menu extends React.Component {
                 },
                 {
                     id: 1,
+                    title: "Violent Dreams",
+                    album: 2,
+                    src: "/songs/Violent-Dreams.mp3",
+                },
+                {
+                    id: 2,
+                    title: "Kerosene",
+                    album: 3,
+                    src: "/songs/Kerosene.mp3",
+                },
+                {
+                    id: 0,
+                    title: "Untrust Us",
+                    album: 1,
+                    src: "/songs/Untrust-Us.mp3",
+                },
+                {
+                    id: 1,
+                    title: "Violent Dreams",
+                    album: 2,
+                    src: "/songs/Violent-Dreams.mp3",
+                },
+                {
+                    id: 2,
+                    title: "Kerosene",
+                    album: 3,
+                    src: "/songs/Kerosene.mp3",
+                },
+                {
+                    id: 0,
+                    title: "Untrust Us",
+                    album: 1,
+                    src: "/songs/Untrust-Us.mp3",
+                },
+                {
+                    id: 1,
+                    title: "Violent Dreams",
+                    album: 2,
+                    src: "/songs/Violent-Dreams.mp3",
+                },
+                {
+                    id: 2,
                     title: "Kerosene",
                     album: 3,
                     src: "/songs/Kerosene.mp3",
@@ -59,7 +108,6 @@ class Menu extends React.Component {
 
                         if (!this.state.albumsFilter.every(valor => valor === true)) {
                             const playlist = this.state.songs.filter(elem => this.state.albumsFilter[elem.album-1]);
-                            console.log("playlist filtrada: ", playlist);
                             this.setState({ playlist: [...playlist] });
                         } else {
                             this.setState({ playlist: this.state.songs })
@@ -72,7 +120,11 @@ class Menu extends React.Component {
                         break;
 
                     case 1:
-                        this.setState({ actualMenuIndex: 1 });
+                        this.setState({ actualMenuIndex: 1, focusOptionIndex: 0, top: 2 });
+                        break;
+
+                    case 2:
+                        this.setState({ actualMenuIndex: 2, focusOptionIndex: 0, top: 2 });
                         break;
                 
                     default:
@@ -85,21 +137,18 @@ class Menu extends React.Component {
                 const newList = this.state.albumsFilter;
                 switch (this.state.focusOptionIndex) {
                     case 0:
-                        console.log("entro en: ", this.state.focusOptionIndex)
                         newList[this.state.focusOptionIndex] = !newList[this.state.focusOptionIndex];
-                        this.setState({ albumsFilter: [...newList]});
+                        this.setState({ albumsFilter: [...newList], lastSongPlayed: null, lastSongPlayedCurrentTime: 0 });
                         break;
 
                     case 1:
-                        console.log("entro en: ", this.state.focusOptionIndex)
                         newList[this.state.focusOptionIndex] = !newList[this.state.focusOptionIndex];
-                        this.setState({ albumsFilter: [...newList]});
+                        this.setState({ albumsFilter: [...newList], lastSongPlayed: null, lastSongPlayedCurrentTime: 0 });
                         break;
 
                     case 2:
-                        console.log("entro en: ", this.state.focusOptionIndex)
                         newList[this.state.focusOptionIndex] = !newList[this.state.focusOptionIndex];
-                        this.setState({ albumsFilter: [...newList]});
+                        this.setState({ albumsFilter: [...newList], lastSongPlayed: null, lastSongPlayedCurrentTime: 0 });
                         break;
                 
                     default:
@@ -121,14 +170,24 @@ class Menu extends React.Component {
 
             case 1:
                 return <SelectAlbumsMenu 
-                    focusOptionIndex={this.state.focusOptionIndex}
-                    albumsFilter={this.state.albumsFilter}
-                />
+                        focusOptionIndex={this.state.focusOptionIndex}
+                        albumsFilter={this.state.albumsFilter}
+                    />
                 break;
+
+            case 2:
+                return <MenuSongs
+                        focusOptionIndex={this.state.focusOptionIndex}
+                        songs={this.state.songs}
+                    />
 
             default:
                 break;
         }
+    }
+
+    updateLastSongPlayed = (song, time) => {
+        this.setState({ lastSongPlayed: song, lastSongPlayedCurrentTime: time });
     }
 
     render(){
@@ -136,9 +195,13 @@ class Menu extends React.Component {
         if (this.state.playerDisplay) {
             return(
                 <Player
+                    audio={this.state.audio}
                     closePlayer={this.closePlayer}
                     songs={this.state.playlist}
                     covers={this.state.covers}
+                    lastSongPlayed={this.state.lastSongPlayed}
+                    lastSongPlayedCurrentTime={this.state.lastSongPlayedCurrentTime}
+                    updateLastSongPlayed={this.updateLastSongPlayed}
                 ></Player>
             )
         }
@@ -152,14 +215,19 @@ class Menu extends React.Component {
                 </div>
                 <div className="pad">
                     <button className="menu-btn"
-                        onClick={() => this.setState({ focusOptionIndex: this.state.focusOptionIndex-1})}
+                        onClick={() => {
+                            if (this.state.focusOptionIndex > 0) {
+                                this.setState({ focusOptionIndex: this.state.focusOptionIndex-1})
+                            }
+                        }}
                     >UP</button>
                     
                     <button className="prev-btn"
-                        onClick={() => this.setState({ actualMenuIndex: 0 })}
+                        onClick={() => this.setState({ actualMenuIndex: 0, focusOptionIndex: 0, top: 3 })}
                     >BACK</button>
                     
                     <button className="next-btn"
+                        onClick={() => this.chooseOption()}
                     >SEL</button>
                     
                     <button className="play-pause-btn"
@@ -167,7 +235,11 @@ class Menu extends React.Component {
                     >OK</button>
                     
                     <button className="mix-btn"
-                        onClick={() => this.setState({ focusOptionIndex: this.state.focusOptionIndex+1})}
+                        onClick={() => {
+                            if (this.state.focusOptionIndex < this.state.top) {
+                                this.setState({ focusOptionIndex: this.state.focusOptionIndex+1})
+                            }
+                        }}
                     >DOWN</button>
                     
                 </div>

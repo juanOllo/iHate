@@ -9,9 +9,9 @@
     justify-content: start;
     align-items: center;
     gap: 0.3rem;
-    opacity: 0;
-
-    animation: menu-screen-appear 0.5s ease-in-out 0s forwards;
+    
+    /* opacity: 0; */
+    /* animation: menu-screen-appear 0.5s ease-in-out 0s forwards; */
 }
 
 @keyframes menu-screen-appear {
