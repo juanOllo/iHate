@@ -82,7 +82,7 @@ class Menu extends React.Component {
                 },
                 {
                     id: 2,
-                    title: "Kerosene",
+                    title: "Suffocation - Memory Tapes Remix",
                     album: 3,
                     src: "/songs/Kerosene.mp3",
                 },
@@ -215,32 +215,32 @@ class Menu extends React.Component {
                 </div>
                 <div className="pad">
                     <button className="menu-btn"
+                        
+                        onClick={() => this.setState({ actualMenuIndex: 0, focusOptionIndex: 0, top: 3 })}
+                    >MENU</button>
+                    
+                    <button className="prev-btn"
                         onClick={() => {
                             if (this.state.focusOptionIndex > 0) {
                                 this.setState({ focusOptionIndex: this.state.focusOptionIndex-1})
                             }
                         }}
-                    >UP</button>
-                    
-                    <button className="prev-btn"
-                        onClick={() => this.setState({ actualMenuIndex: 0, focusOptionIndex: 0, top: 3 })}
-                    >BACK</button>
+                    >PREV</button>
                     
                     <button className="next-btn"
-                        onClick={() => this.chooseOption()}
-                    >SEL</button>
-                    
-                    <button className="play-pause-btn"
-                        onClick={() => this.chooseOption()}
-                    >OK</button>
-                    
-                    <button className="mix-btn"
                         onClick={() => {
                             if (this.state.focusOptionIndex < this.state.top) {
                                 this.setState({ focusOptionIndex: this.state.focusOptionIndex+1})
                             }
                         }}
-                    >DOWN</button>
+                    >NEXT</button>
+                    
+                    <button className="play-pause-btn"
+                        onClick={() => this.chooseOption()}
+                    >P/P</button>
+                    
+                    <button className="mix-btn"
+                    >LIST</button>
                     
                 </div>
             </div>

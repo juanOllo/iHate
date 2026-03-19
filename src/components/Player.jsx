@@ -39,6 +39,16 @@ class Aparato extends React.Component {
         this.playSong(this.props.songs.indexOf(this.props.lastSongPlayed) || 0);
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.currentSong !== this.state.currentSong) {
+            const nuevoIndice = this.props.songs.indexOf(this.state.currentSong);
+
+            if (nuevoIndice !== this.state.songListIndex) {
+                this.setState({ songListIndex: nuevoIndice });
+            }
+        }
+    }
+
     handleTimeUpdate = () => {
         this.setState({ currentSongCurrentTime: this.audioRef.current.currentTime });
     };
@@ -184,12 +194,15 @@ class Aparato extends React.Component {
                     <button className="play-pause-btn"
                         onClick={() => {
                             if (this.state.songsListDisplay) {
-                                this.setState({ 
-                                    songsListDisplay: !this.state.songsListDisplay, 
-                                    currentSongCurrentTime: 0,
-                                }, () => {
-                                    this.playSong(this.state.songListIndex);
-                                })
+                                this.setState({ songsListDisplay: !this.state.songsListDisplay })
+
+                                if (this.state.songListIndex !== this.props.songs.indexOf(this.state.currentSong)) {
+                                    this.setState({ 
+                                        currentSongCurrentTime: 0,
+                                    }, () => {
+                                        this.playSong(this.state.songListIndex);
+                                    })
+                                }
                             } else if (!this.state.isPlayingSong) {
                                 this.playSong();
                             } else {
@@ -199,10 +212,20 @@ class Aparato extends React.Component {
                     >P/P</button>
                     
                     <button className="mix-btn"
-                        onClick={() => this.setState({ 
-                            songsListDisplay: !this.state.songsListDisplay,
-                            songListIndex: this.props.songs.indexOf(this.state.currentSong),
-                         })}
+                        onClick={() => {
+                            if (this.state.songsListDisplay) {
+                                const songsList = document.getElementById("player-songs-list");
+                                songsList.style.animation= "player-songs-list-disappears 0.3s ease-in-out 0s forwards";
+                                const arrowSongsList = document.getElementById("player-songs-arrow");
+                                arrowSongsList.style.animation= "fade-out 0.2s ease-in-out 0s forwards";
+                            }
+                            setTimeout(() => {
+                                this.setState({ 
+                                    songsListDisplay: !this.state.songsListDisplay,
+                                    songListIndex: this.props.songs.indexOf(this.state.currentSong),
+                                })
+                            }, 310);
+                        }}
                     >LIST</button>
                     
                 </div>
