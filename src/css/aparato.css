@@ -62,16 +62,3 @@
     width: 2rem;
     height: 2rem;
 }
-
-.menu-album-checkout{
-    width: 0.7rem;
-    height: 0.7rem;
-    background-color: white;
-    border-radius: 1px;
-    border: 1px solid black;
-    margin-right: 0.2rem;
-}
-
-.menu-album-checkout-selected{
-    background-color: black;
-}
