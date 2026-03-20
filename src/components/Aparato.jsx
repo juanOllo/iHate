@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Player from "./Player.jsx"
-import MainMenu from "./MainMenu.jsx";
-import SelectAlbumsMenu from "./SelectAlbumsMenu.jsx";
+import MenuMain from "./MenuMain.jsx";
+import MenuSelectAlbums from "./MenuSelectAlbums.jsx";
 import MenuSongs from "./MenuSongs.jsx";
 
 class Menu extends React.Component {
@@ -15,7 +15,6 @@ class Menu extends React.Component {
             playerDisplay: false,
             songs: [],
             playlist: [],
-            covers: [],
 
             focusOptionIndex: 0,
             actualMenuIndex: 0,
@@ -36,61 +35,65 @@ class Menu extends React.Component {
                     id: 0,
                     title: "Untrust Us",
                     album: 1,
+                    album_cover: "/covers/crystal-castles-cover-1.jpg",
                     src: "/songs/Untrust-Us.mp3",
                 },
                 {
                     id: 1,
                     title: "Violent Dreams",
                     album: 2,
+                    album_cover: "/covers/crystal-castles-cover-2.jpg",
                     src: "/songs/Violent-Dreams.mp3",
                 },
                 {
                     id: 2,
                     title: "Kerosene",
                     album: 3,
+                    album_cover: "/covers/crystal-castles-cover-3.jpg",
                     src: "/songs/Kerosene.mp3",
                 },
                 {
                     id: 0,
                     title: "Untrust Us",
                     album: 1,
+                    album_cover: "/covers/crystal-castles-cover-1.jpg",
                     src: "/songs/Untrust-Us.mp3",
                 },
                 {
                     id: 1,
                     title: "Violent Dreams",
                     album: 2,
+                    album_cover: "/covers/crystal-castles-cover-2.jpg",
                     src: "/songs/Violent-Dreams.mp3",
                 },
                 {
                     id: 2,
                     title: "Kerosene",
                     album: 3,
+                    album_cover: "/covers/crystal-castles-cover-3.jpg",
                     src: "/songs/Kerosene.mp3",
                 },
                 {
                     id: 0,
                     title: "Untrust Us",
                     album: 1,
+                    album_cover: "/covers/crystal-castles-cover-1.jpg",
                     src: "/songs/Untrust-Us.mp3",
                 },
                 {
                     id: 1,
                     title: "Violent Dreams",
                     album: 2,
+                    album_cover: "/covers/crystal-castles-cover-2.jpg",
                     src: "/songs/Violent-Dreams.mp3",
                 },
                 {
                     id: 2,
                     title: "Suffocation - Memory Tapes Remix",
                     album: 3,
+                    album_cover: "/covers/crystal-castles-cover-3.jpg",
                     src: "/songs/Kerosene.mp3",
                 },
-            ],
-            covers: [
-                "/covers/crystal-castles-cover-1.jpg",
-                "/covers/crystal-castles-cover-2.jpg",
-                "/covers/crystal-castles-cover-3.jpg"
             ]
         });
     }
@@ -166,10 +169,10 @@ class Menu extends React.Component {
     returnMenuDisplay(){
         switch (this.state.actualMenuIndex) {
             case 0:
-                return <MainMenu focusOptionIndex={this.state.focusOptionIndex}/>
+                return <MenuMain focusOptionIndex={this.state.focusOptionIndex}/>
 
             case 1:
-                return <SelectAlbumsMenu 
+                return <MenuSelectAlbums 
                         focusOptionIndex={this.state.focusOptionIndex}
                         albumsFilter={this.state.albumsFilter}
                     />
@@ -198,7 +201,6 @@ class Menu extends React.Component {
                     audio={this.state.audio}
                     closePlayer={this.closePlayer}
                     songs={this.state.playlist}
-                    covers={this.state.covers}
                     lastSongPlayed={this.state.lastSongPlayed}
                     lastSongPlayedCurrentTime={this.state.lastSongPlayedCurrentTime}
                     updateLastSongPlayed={this.updateLastSongPlayed}

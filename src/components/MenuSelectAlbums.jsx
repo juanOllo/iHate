@@ -1,9 +1,7 @@
 import React from "react";
 
-class SelectAlbumsMenu extends React.Component {
-
+class MenuSelectAlbums extends React.Component {
     render(){
-
         return(
             <div className="menu-screen">
                 <div className="menu-header">iHate</div>
@@ -27,9 +25,7 @@ class SelectAlbumsMenu extends React.Component {
                 </div>
             </div>
         )
-
     }
-
 }
 
-export default SelectAlbumsMenu;
+export default MenuSelectAlbums;

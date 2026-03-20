@@ -1,9 +1,7 @@
 import React from "react";
 
-class MainMenu extends React.Component {
-
+class MenuMain extends React.Component {
     render(){
-
         return(
             <div id="menu-screen" className="menu-screen">
                 <div className="menu-header">iHate</div>
@@ -25,9 +23,7 @@ class MainMenu extends React.Component {
                 </div>
             </div>
         )
-
     }
-
 }
 
-export default MainMenu;
+export default MenuMain;

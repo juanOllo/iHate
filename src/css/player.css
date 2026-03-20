@@ -375,3 +375,17 @@
         margin-left: 0;
     }
 }
+
+.player-pause-filter{
+    /* background-color: red; */
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 20rem;
+    height: 20rem;
+    position: relative;
+    top: -20.45rem;
+    z-index: 2;
+    
+    display: flex;
+
+    animation: fade-in 0.1s ease-in-out 0s forwards;
+}

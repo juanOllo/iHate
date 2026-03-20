@@ -66,6 +66,9 @@ class Aparato extends React.Component {
 
 
     playSong(index){
+        // Innecesario?
+        this.pauseSong();
+
         let currentSong = this.state.currentSong || null;
 
         if(index >= 0){
@@ -137,6 +140,14 @@ class Aparato extends React.Component {
         }
     }
 
+    disappearSongsListAnims(){
+        const songsList = document.getElementById("player-songs-list");
+        songsList.style.animation= "player-songs-list-disappears 0.3s ease-in-out 0s forwards";
+        const arrowSongsList = document.getElementById("player-songs-arrow");
+        arrowSongsList.style.animation= "fade-out 0.2s ease-in-out 0s forwards";
+
+    }
+
     render(){
         return(
             <div className="aparato">
@@ -144,7 +155,7 @@ class Aparato extends React.Component {
                     {
                         this.state.currentSong ?
                             <PlayerScreen
-                                cover={this.props.covers[this.state.currentSong.album-1]}
+                                cover={this.state.currentSong.album_cover}
                                 currentSongCurrentTime={this.state.currentSongCurrentTime}
                                 duration={this.state.audio.duration}
                                 title={this.state.currentSong?.title}
@@ -153,6 +164,8 @@ class Aparato extends React.Component {
                                 songs={this.props.songs}
                                 songsListDisplay={this.state.songsListDisplay}
                                 songListIndex={this.state.songListIndex}
+
+                                isPlayingSong={this.state.isPlayingSong}
                             />
                             :
                             null
@@ -193,9 +206,16 @@ class Aparato extends React.Component {
                     
                     <button className="play-pause-btn"
                         onClick={() => {
-                            if (this.state.songsListDisplay) {
-                                this.setState({ songsListDisplay: !this.state.songsListDisplay })
 
+                            // Reproduce la cancion seleccionada de la lista
+                            if (this.state.songsListDisplay) {
+                                this.disappearSongsListAnims();
+
+                                setTimeout(() => {
+                                    this.setState({ songsListDisplay: !this.state.songsListDisplay })
+                                }, 310);
+
+                                // Evita la seleccion de la cancion actual
                                 if (this.state.songListIndex !== this.props.songs.indexOf(this.state.currentSong)) {
                                     this.setState({ 
                                         currentSongCurrentTime: 0,
@@ -203,6 +223,8 @@ class Aparato extends React.Component {
                                         this.playSong(this.state.songListIndex);
                                     })
                                 }
+
+                            // Inicia o pausa la cancion actual
                             } else if (!this.state.isPlayingSong) {
                                 this.playSong();
                             } else {
@@ -214,10 +236,7 @@ class Aparato extends React.Component {
                     <button className="mix-btn"
                         onClick={() => {
                             if (this.state.songsListDisplay) {
-                                const songsList = document.getElementById("player-songs-list");
-                                songsList.style.animation= "player-songs-list-disappears 0.3s ease-in-out 0s forwards";
-                                const arrowSongsList = document.getElementById("player-songs-arrow");
-                                arrowSongsList.style.animation= "fade-out 0.2s ease-in-out 0s forwards";
+                                this.disappearSongsListAnims();
                             }
                             setTimeout(() => {
                                 this.setState({ 
