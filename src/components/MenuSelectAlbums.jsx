@@ -11,14 +11,14 @@ class MenuSelectAlbums extends React.Component {
                     Crystal Castles |
                     {
                         this.props.albumsFilter[0] ?
-                            <div style={{width: "1rem", display: "flex", marginRight: "0", backgroundColor: ""}}>
+                            <div style={{scale: "0.85", width: "1rem", display: "flex", marginRight: "0", backgroundColor: ""}}>
                                 <div style={{backgroundColor: "lightgreen", width: "5px", height: "0.7rem", transform: "rotate(-45deg)", margin: "auto 0.1rem 0 0", zIndex: "2"}}></div>
                                 <div style={{backgroundColor: "lightgreen", width: "5px", height: "1rem", transform: "rotate(40deg)"}}></div>
                             </div>
                             :
-                            <div style={{width: "1rem", display: "flex", marginRight: "0", backgroundColor: ""}}>
-                                <div style={{backgroundColor: "red", width: "5px", height: "1rem", transform: "rotate(-45deg)", margin: "auto -0.3rem 0 0.3rem", zIndex: "2"}}></div>
-                                <div style={{backgroundColor: "red", width: "5px", height: "1rem", transform: "rotate(45deg)", marginRight: "-1.3rem"}}></div>
+                            <div style={{scale: "0.85", width: "1rem", display: "flex", marginRight: "0", backgroundColor: ""}}>
+                                <div style={{backgroundColor: "crimson", width: "5px", height: "1rem", transform: "rotate(-45deg)", margin: "auto -0.3rem 0 0.3rem", zIndex: "2"}}></div>
+                                <div style={{backgroundColor: "crimson", width: "5px", height: "1rem", transform: "rotate(45deg)", marginRight: "-1.3rem"}}></div>
                             </div>
                     }
                 </div>
@@ -28,14 +28,14 @@ class MenuSelectAlbums extends React.Component {
                     Crystal Castles ||
                     {
                         this.props.albumsFilter[1] ?
-                            <div style={{width: "1rem", display: "flex", marginRight: "0", backgroundColor: ""}}>
+                            <div style={{scale: "0.85", width: "1rem", display: "flex", marginRight: "0", backgroundColor: ""}}>
                                 <div style={{backgroundColor: "lightgreen", width: "5px", height: "0.7rem", transform: "rotate(-45deg)", margin: "auto 0.1rem 0 0", zIndex: "2"}}></div>
                                 <div style={{backgroundColor: "lightgreen", width: "5px", height: "1rem", transform: "rotate(40deg)"}}></div>
                             </div>
                             :
-                            <div style={{width: "1rem", display: "flex", marginRight: "0", backgroundColor: ""}}>
-                                <div style={{backgroundColor: "red", width: "5px", height: "1rem", transform: "rotate(-45deg)", margin: "auto -0.3rem 0 0.3rem", zIndex: "2"}}></div>
-                                <div style={{backgroundColor: "red", width: "5px", height: "1rem", transform: "rotate(45deg)", marginRight: "-1.3rem"}}></div>
+                            <div style={{scale: "0.85", width: "1rem", display: "flex", marginRight: "0", backgroundColor: ""}}>
+                                <div style={{backgroundColor: "crimson", width: "5px", height: "1rem", transform: "rotate(-45deg)", margin: "auto -0.3rem 0 0.3rem", zIndex: "2"}}></div>
+                                <div style={{backgroundColor: "crimson", width: "5px", height: "1rem", transform: "rotate(45deg)", marginRight: "-1.3rem"}}></div>
                             </div>
                     }
                 </div>
@@ -45,14 +45,14 @@ class MenuSelectAlbums extends React.Component {
                     Crystal Castles |||
                     {
                         this.props.albumsFilter[2] ?
-                            <div style={{width: "1rem", display: "flex", marginRight: "0", backgroundColor: ""}}>
+                            <div style={{scale: "0.85", width: "1rem", display: "flex", marginRight: "0", backgroundColor: ""}}>
                                 <div style={{backgroundColor: "lightgreen", width: "5px", height: "0.7rem", transform: "rotate(-45deg)", margin: "auto 0.1rem 0 0", zIndex: "2"}}></div>
                                 <div style={{backgroundColor: "lightgreen", width: "5px", height: "1rem", transform: "rotate(40deg)"}}></div>
                             </div>
                             :
-                            <div style={{width: "1rem", display: "flex", marginRight: "0", backgroundColor: ""}}>
-                                <div style={{backgroundColor: "red", width: "5px", height: "1rem", transform: "rotate(-45deg)", margin: "auto -0.3rem 0 0.3rem", zIndex: "2"}}></div>
-                                <div style={{backgroundColor: "red", width: "5px", height: "1rem", transform: "rotate(45deg)", marginRight: "-1.3rem"}}></div>
+                            <div style={{scale: "0.85", width: "1rem", display: "flex", marginRight: "0", backgroundColor: ""}}>
+                                <div style={{backgroundColor: "crimson", width: "5px", height: "1rem", transform: "rotate(-45deg)", margin: "auto -0.3rem 0 0.3rem", zIndex: "2"}}></div>
+                                <div style={{backgroundColor: "crimson", width: "5px", height: "1rem", transform: "rotate(45deg)", marginRight: "-1.3rem"}}></div>
                             </div>
                     }
                 </div>

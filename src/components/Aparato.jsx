@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Player from "./Player.jsx"
 import MenuMain from "./MenuMain.jsx";
 import MenuSelectAlbums from "./MenuSelectAlbums.jsx";
-import MenuSongs from "./MenuSongs.jsx";
+import dataSongs from "../data/songs.js";
+
 
 class Menu extends React.Component {
 
@@ -24,77 +25,15 @@ class Menu extends React.Component {
 
             lastSongPlayed: null,
             lastSongPlayedCurrentTime: 0,
+
+            isSongsListShuffled: false,
         }
 
     }
 
     componentDidMount(){
         this.setState({
-            songs: [
-                {
-                    id: 0,
-                    title: "Untrust Us",
-                    album: 1,
-                    album_cover: "/covers/crystal-castles-cover-1.jpg",
-                    src: "/songs/Untrust-Us.mp3",
-                },
-                {
-                    id: 1,
-                    title: "Violent Dreams",
-                    album: 2,
-                    album_cover: "/covers/crystal-castles-cover-2.jpg",
-                    src: "/songs/Violent-Dreams.mp3",
-                },
-                {
-                    id: 2,
-                    title: "Kerosene",
-                    album: 3,
-                    album_cover: "/covers/crystal-castles-cover-3.jpg",
-                    src: "/songs/Kerosene.mp3",
-                },
-                {
-                    id: 0,
-                    title: "Untrust Us",
-                    album: 1,
-                    album_cover: "/covers/crystal-castles-cover-1.jpg",
-                    src: "/songs/Untrust-Us.mp3",
-                },
-                {
-                    id: 1,
-                    title: "Violent Dreams",
-                    album: 2,
-                    album_cover: "/covers/crystal-castles-cover-2.jpg",
-                    src: "/songs/Violent-Dreams.mp3",
-                },
-                {
-                    id: 2,
-                    title: "Kerosene",
-                    album: 3,
-                    album_cover: "/covers/crystal-castles-cover-3.jpg",
-                    src: "/songs/Kerosene.mp3",
-                },
-                {
-                    id: 0,
-                    title: "Untrust Us",
-                    album: 1,
-                    album_cover: "/covers/crystal-castles-cover-1.jpg",
-                    src: "/songs/Untrust-Us.mp3",
-                },
-                {
-                    id: 1,
-                    title: "Violent Dreams",
-                    album: 2,
-                    album_cover: "/covers/crystal-castles-cover-2.jpg",
-                    src: "/songs/Violent-Dreams.mp3",
-                },
-                {
-                    id: 2,
-                    title: "Suffocation - Memory Tapes Remix",
-                    album: 3,
-                    album_cover: "/covers/crystal-castles-cover-3.jpg",
-                    src: "/songs/Kerosene.mp3",
-                },
-            ]
+            songs: dataSongs
         });
     }
 
@@ -102,8 +41,27 @@ class Menu extends React.Component {
         this.setState({ playerDisplay: false });
     }
 
+    shuffleSongs(){
+        if (!this.state.isSongsListShuffled) {
+            const playlist = [...this.state.songs];
+            playlist.sort(() => Math.random() - 0.5)
+            console.log("playlist: ", playlist)
+            
+            this.setState({ songs: [...playlist] })
+        } else {
+            this.setState({ songs: dataSongs })
+        }
+        
+        this.setState({
+            isSongsListShuffled: !this.state.isSongsListShuffled,
+            lastSongPlayed: null,
+            lastSongPlayedCurrentTime: 0,
+        })
+    }
+
     chooseOption(){
         switch (this.state.actualMenuIndex) {
+            // MenuMain
             case 0:
                 switch (this.state.focusOptionIndex) {
                     case 0:
@@ -127,6 +85,10 @@ class Menu extends React.Component {
                         break;
 
                     case 2:
+                        this.shuffleSongs();
+                        break;
+
+                    case 3:
                         this.setState({ actualMenuIndex: 2, focusOptionIndex: 0, top: 2 });
                         break;
                 
@@ -136,6 +98,7 @@ class Menu extends React.Component {
                 
                 break;
 
+            // MenuSelectAlbum
             case 1:
                 const newList = this.state.albumsFilter;
                 switch (this.state.focusOptionIndex) {
@@ -169,19 +132,15 @@ class Menu extends React.Component {
     returnMenuDisplay(){
         switch (this.state.actualMenuIndex) {
             case 0:
-                return <MenuMain focusOptionIndex={this.state.focusOptionIndex}/>
+                return <MenuMain 
+                        focusOptionIndex={this.state.focusOptionIndex}
+                        isSongsListShuffled={this.state.isSongsListShuffled}
+                    />
 
             case 1:
                 return <MenuSelectAlbums 
                         focusOptionIndex={this.state.focusOptionIndex}
                         albumsFilter={this.state.albumsFilter}
-                    />
-                break;
-
-            case 2:
-                return <MenuSongs
-                        focusOptionIndex={this.state.focusOptionIndex}
-                        songs={this.state.songs}
                     />
 
             default:
@@ -211,9 +170,7 @@ class Menu extends React.Component {
         return(
             <div className="aparato menu">
                 <div className="screen">
-                    {
-                        this.returnMenuDisplay()
-                    }
+                    { this.returnMenuDisplay() }
                 </div>
                 <div className="pad">
                     <button className="menu-btn"
@@ -227,7 +184,14 @@ class Menu extends React.Component {
                                 this.setState({ focusOptionIndex: this.state.focusOptionIndex-1})
                             }
                         }}
-                    >PREV</button>
+                    >
+                        {/* PREV */}
+                        <div style={{scale: "0.95", transform: "rotate(180deg)"}}>
+                            <div style={{transform: "translate(-0.5rem, 0.9rem)", width: "0", height: "0", borderTop: "0.4rem solid transparent",borderBottom: "0.4rem solid transparent",borderLeft: "0.8rem solid rgb(93, 93, 93)",}}></div>
+                            <div style={{transform: "translate(0.15rem, 0.08rem)", width: "0", height: "0", borderTop: "0.4rem solid transparent",borderBottom: "0.4rem solid transparent",borderLeft: "0.8rem solid rgb(93, 93, 93)",}}></div>
+                            <div style={{transform: "translate(0.75rem, -0.8rem)", width: "0.25rem", height: "0.9rem", backgroundColor: "rgb(93, 93, 93)"}}></div>
+                        </div>
+                    </button>
                     
                     <button className="next-btn"
                         onClick={() => {
@@ -235,14 +199,34 @@ class Menu extends React.Component {
                                 this.setState({ focusOptionIndex: this.state.focusOptionIndex+1})
                             }
                         }}
-                    >NEXT</button>
+                    >
+                        {/* NEXT */}
+                        <div style={{scale: "0.95"}}>
+                            <div style={{transform: "translate(-0.5rem, 0.8rem)", width: "0", height: "0", borderTop: "0.4rem solid transparent",borderBottom: "0.4rem solid transparent",borderLeft: "0.8rem solid rgb(93, 93, 93)",}}></div>
+                            <div style={{transform: "translate(0.15rem, -0.02rem)", width: "0", height: "0", borderTop: "0.4rem solid transparent",borderBottom: "0.4rem solid transparent",borderLeft: "0.8rem solid rgb(93, 93, 93)",}}></div>
+                            <div style={{transform: "translate(0.75rem, -0.9rem)", width: "0.25rem", height: "0.9rem", backgroundColor: "rgb(93, 93, 93)"}}></div>
+                        </div>
+                    </button>
                     
                     <button className="play-pause-btn"
                         onClick={() => this.chooseOption()}
-                    >P/P</button>
+                    >
+                        {/* P/P */}
+                        <div style={{scale: "0.95"}}>
+                            <div style={{transform: "translate(-0.5rem, 0.9rem)", width: "0", height: "0", borderTop: "0.4rem solid transparent",borderBottom: "0.4rem solid transparent",borderLeft: "0.8rem solid rgb(93, 93, 93)",}}></div>
+                            <div style={{transform: "translate(0.5rem, 0.05rem)", width: "0.25rem", height: "0.9rem", backgroundColor: "rgb(93, 93, 93)"}}></div>
+                            <div style={{transform: "translate(1rem, -0.85rem)", width: "0.25rem", height: "0.9rem", backgroundColor: "rgb(93, 93, 93)"}}></div>
+                        </div>
+                    </button>
                     
-                    <button className="mix-btn"
-                    >LIST</button>
+                    <button className="mix-btn">
+                        {/* LIST */}
+                        <div>
+                            <div style={{width: "0.25rem", height: "1.1rem", backgroundColor: "rgb(93, 93, 93)", transform: "rotate(90deg)", borderRadius: "5px"}}></div>
+                            <div style={{width: "0.25rem", height: "1.1rem", backgroundColor: "rgb(93, 93, 93)", transform: "rotate(90deg)", borderRadius: "5px", margin: "-0.7rem 0"}}></div>
+                            <div style={{width: "0.25rem", height: "1.1rem", backgroundColor: "rgb(93, 93, 93)", transform: "rotate(90deg)", borderRadius: "5px"}}></div>
+                        </div>
+                    </button>
                     
                 </div>
             </div>

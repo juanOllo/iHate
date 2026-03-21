@@ -190,7 +190,13 @@ class Aparato extends React.Component {
                                 this.playPrevSong()
                             }
                         }}
-                    >PREV</button>
+                    >
+                        <div style={{scale: "0.95", transform: "rotate(180deg)"}}>
+                            <div style={{transform: "translate(-0.5rem, 0.9rem)", width: "0", height: "0", borderTop: "0.4rem solid transparent",borderBottom: "0.4rem solid transparent",borderLeft: "0.8rem solid rgb(93, 93, 93)",}}></div>
+                            <div style={{transform: "translate(0.15rem, 0.08rem)", width: "0", height: "0", borderTop: "0.4rem solid transparent",borderBottom: "0.4rem solid transparent",borderLeft: "0.8rem solid rgb(93, 93, 93)",}}></div>
+                            <div style={{transform: "translate(0.75rem, -0.8rem)", width: "0.25rem", height: "0.9rem", backgroundColor: "rgb(93, 93, 93)"}}></div>
+                        </div>
+                    </button>
                     
                     <button className="next-btn"
                         onClick={() => {
@@ -202,7 +208,13 @@ class Aparato extends React.Component {
                                 this.playNextSong()
                             }
                         }}
-                    >NEXT</button>
+                    >
+                        <div style={{scale: "0.95"}}>
+                            <div style={{transform: "translate(-0.5rem, 0.8rem)", width: "0", height: "0", borderTop: "0.4rem solid transparent",borderBottom: "0.4rem solid transparent",borderLeft: "0.8rem solid rgb(93, 93, 93)",}}></div>
+                            <div style={{transform: "translate(0.15rem, -0.02rem)", width: "0", height: "0", borderTop: "0.4rem solid transparent",borderBottom: "0.4rem solid transparent",borderLeft: "0.8rem solid rgb(93, 93, 93)",}}></div>
+                            <div style={{transform: "translate(0.75rem, -0.9rem)", width: "0.25rem", height: "0.9rem", backgroundColor: "rgb(93, 93, 93)"}}></div>
+                        </div>
+                    </button>
                     
                     <button className="play-pause-btn"
                         onClick={() => {
@@ -231,7 +243,13 @@ class Aparato extends React.Component {
                                 this.pauseSong();
                             }
                         }}
-                    >P/P</button>
+                    >
+                        <div style={{scale: "0.95"}}>
+                            <div style={{transform: "translate(-0.5rem, 0.9rem)", width: "0", height: "0", borderTop: "0.4rem solid transparent",borderBottom: "0.4rem solid transparent",borderLeft: "0.8rem solid rgb(93, 93, 93)",}}></div>
+                            <div style={{transform: "translate(0.5rem, 0.05rem)", width: "0.25rem", height: "0.9rem", backgroundColor: "rgb(93, 93, 93)"}}></div>
+                            <div style={{transform: "translate(1rem, -0.85rem)", width: "0.25rem", height: "0.9rem", backgroundColor: "rgb(93, 93, 93)"}}></div>
+                        </div>
+                    </button>
                     
                     <button className="mix-btn"
                         onClick={() => {
@@ -245,7 +263,13 @@ class Aparato extends React.Component {
                                 })
                             }, 310);
                         }}
-                    >LIST</button>
+                    >
+                        <div>
+                            <div style={{width: "0.25rem", height: "1.1rem", backgroundColor: "rgb(93, 93, 93)", transform: "rotate(90deg)", borderRadius: "5px"}}></div>
+                            <div style={{width: "0.25rem", height: "1.1rem", backgroundColor: "rgb(93, 93, 93)", transform: "rotate(90deg)", borderRadius: "5px", margin: "-0.7rem 0"}}></div>
+                            <div style={{width: "0.25rem", height: "1.1rem", backgroundColor: "rgb(93, 93, 93)", transform: "rotate(90deg)", borderRadius: "5px"}}></div>
+                        </div>
+                    </button>
                     
                 </div>
             </div>

@@ -14,8 +14,20 @@ class MenuMain extends React.Component {
                     <div> {">"} </div>
                 </div>
                 <div className={"menu-options" + (this.props.focusOptionIndex === 2 ? " focused-option" : "")}
-                >Songs
-                    <div> {">"} </div>
+                >
+                    {/* Shuffle songs */}
+                    {
+                        this.props.isSongsListShuffled ?
+                            "Sort songs"
+                            :
+                            "Shuffle songs"
+                    }
+                    {/* {
+                        this.props.isSongsListShuffled ?
+                            <div> :) </div>
+                            :
+                            <div> :( </div>
+                    } */}
                 </div>
                 <div className={"menu-options" + (this.props.focusOptionIndex === 3 ? " focused-option" : "")}
                 >Info
