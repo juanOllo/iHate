@@ -1,5 +1,5 @@
 import React from "react";
-import PlayerScreen from "./PlayerScreen.jsx"
+import PlayerScreen from "./PlayerScreen.jsx";
 
 class Aparato extends React.Component {
     constructor(props) {
@@ -49,9 +49,9 @@ class Aparato extends React.Component {
         }
     }
 
-    handleTimeUpdate = () => {
-        this.setState({ currentSongCurrentTime: this.audioRef.current.currentTime });
-    };
+    // handleTimeUpdate = () => {
+    //     this.setState({ currentSongCurrentTime: this.audioRef.current.currentTime });
+    // };
 
     // handleLoadedMetadata = () => {
     //     this.setState({ duration: this.audioRef.current.duration });
@@ -66,8 +66,7 @@ class Aparato extends React.Component {
 
 
     playSong(index){
-        // Innecesario?
-        this.pauseSong();
+        if (this.props.songs.length <= 0 || index >= this.props.songs.length) { return; }
 
         let currentSong = this.state.currentSong || null;
 
@@ -84,11 +83,11 @@ class Aparato extends React.Component {
         this.setState({
             currentSong,
             isPlayingSong: true,
-            audio,
+            // audio,
         }, () => {
-            setTimeout(() => {
-                this.state.audio.play();
-            }, 100);
+            audio.oncanplay = () => {
+                audio.play();
+            }
         })
     }
 
@@ -166,6 +165,8 @@ class Aparato extends React.Component {
                                 songListIndex={this.state.songListIndex}
 
                                 isPlayingSong={this.state.isPlayingSong}
+
+                                isSongsListShuffled={this.props.isSongsListShuffled}
                             />
                             :
                             null
@@ -255,13 +256,18 @@ class Aparato extends React.Component {
                         onClick={() => {
                             if (this.state.songsListDisplay) {
                                 this.disappearSongsListAnims();
-                            }
-                            setTimeout(() => {
+                                setTimeout(() => {
+                                    this.setState({ 
+                                        songsListDisplay: !this.state.songsListDisplay,
+                                        songListIndex: this.props.songs.indexOf(this.state.currentSong),
+                                    })
+                                }, 310);
+                            } else {
                                 this.setState({ 
                                     songsListDisplay: !this.state.songsListDisplay,
                                     songListIndex: this.props.songs.indexOf(this.state.currentSong),
                                 })
-                            }, 310);
+                            }
                         }}
                     >
                         <div>

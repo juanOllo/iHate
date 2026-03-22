@@ -69,6 +69,10 @@ class Menu extends React.Component {
 
                         if (!this.state.albumsFilter.every(valor => valor === true)) {
                             const playlist = this.state.songs.filter(elem => this.state.albumsFilter[elem.album-1]);
+
+                            // No permite abrir el player si la lisa de canciones esta vacia
+                            if (playlist.length <= 0) { return; }
+                            
                             this.setState({ playlist: [...playlist] });
                         } else {
                             this.setState({ playlist: this.state.songs })
@@ -163,6 +167,7 @@ class Menu extends React.Component {
                     lastSongPlayed={this.state.lastSongPlayed}
                     lastSongPlayedCurrentTime={this.state.lastSongPlayedCurrentTime}
                     updateLastSongPlayed={this.updateLastSongPlayed}
+                    isSongsListShuffled={this.state.isSongsListShuffled}
                 ></Player>
             )
         }

@@ -20,6 +20,24 @@ class PlayerScreen extends React.Component {
                         }}
                     />
                     <p>{this.props.title || "()"}</p>
+
+                    {
+                        this.props.isSongsListShuffled ?
+                            <div style={{scale: "0.9", opacity: "0.7", transform: "translate(-9rem, -20.8em)", backgroundColor: "white", height: "2rem", width: "2rem", borderRadius: "50%"}}>
+                                <div style={{scale: "0.8", transform: "translate(0.1rem, 0.6rem)", display: "flex", gap: "0.05rem", backgroundColor: ""}}>
+                                    <div style={{width: "0.8rem", height: "1rem", background: "linear-gradient(white 0%, white 49%, gray 50%, gray 100%)", borderRadius: "50%", transform: "rotate(-90deg)"}}>
+                                        <div style={{scale: "0.7", width: "0.8rem", height: "1rem", background: "white", borderRadius: "50%"}}></div>
+                                    </div>
+                                    <div style={{width: "0.8rem", height: "1rem", background: "linear-gradient(white 0%, white 49%, gray 50%, gray 100%)", borderRadius: "50%", transform: "rotate(90deg)"}}>
+                                        <div style={{scale: "0.7", width: "0.8rem", height: "1rem", background: "white", borderRadius: "50%"}}></div>
+                                    </div>
+                                    <div style={{transform: "translate(-0.5rem, -0.05rem)", width: "0", height: "0", borderTop: "0.2rem solid transparent",borderBottom: "0.2rem solid transparent",borderLeft: "0.4rem solid gray",}}></div>
+                                    <div style={{transform: "translate(-0.95rem, 0.65rem)", width: "0", height: "0", borderTop: "0.2rem solid transparent",borderBottom: "0.2rem solid transparent",borderLeft: "0.4rem solid gray",}}></div>
+                                </div>
+                            </div>
+                            :
+                            null
+                    }
                 </div>
 
                 <img id="screen-cover" className="screen-cover" alt="cover" 
