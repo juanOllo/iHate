@@ -175,9 +175,19 @@ class Aparato extends React.Component {
                 <div className="pad">
                     <button className="menu-btn"
                         onClick={() => {
-                            this.props.updateLastSongPlayed(this.state.currentSong, this.state.currentSongCurrentTime);
-                            this.pauseSong();
-                            this.props.closePlayer();
+                            if (this.state.songsListDisplay) {
+                                this.disappearSongsListAnims();
+                                setTimeout(() => {
+                                    this.setState({ 
+                                        songsListDisplay: !this.state.songsListDisplay,
+                                        songListIndex: this.props.songs.indexOf(this.state.currentSong),
+                                    })
+                                }, 310);
+                            } else {
+                                this.props.updateLastSongPlayed(this.state.currentSong, this.state.currentSongCurrentTime);
+                                this.pauseSong();
+                                this.props.closePlayer();
+                            }
                         }}
                     >MENU</button>
                     

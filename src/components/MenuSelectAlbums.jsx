@@ -8,7 +8,7 @@ class MenuSelectAlbums extends React.Component {
                 <div className={"menu-options" + (this.props.focusOptionIndex === 0 ? " focused-option" : "")}
                 >
                     <img className="menu-cover-img" src="/covers/crystal-castles-cover-1.jpg" alt="cover" />
-                    Crystal Castles |
+                    Crystal Castles (|)
                     {
                         this.props.albumsFilter[0] ?
                             <div style={{scale: "0.85", width: "1rem", display: "flex", marginRight: "0", backgroundColor: ""}}>
@@ -25,7 +25,7 @@ class MenuSelectAlbums extends React.Component {
                 <div className={"menu-options" + (this.props.focusOptionIndex === 1 ? " focused-option" : "")}
                 >
                     <img className="menu-cover-img" src="/covers/crystal-castles-cover-2.jpg" alt="cover" />
-                    Crystal Castles ||
+                    Crystal Castles (||)
                     {
                         this.props.albumsFilter[1] ?
                             <div style={{scale: "0.85", width: "1rem", display: "flex", marginRight: "0", backgroundColor: ""}}>
@@ -42,7 +42,7 @@ class MenuSelectAlbums extends React.Component {
                 <div className={"menu-options" + (this.props.focusOptionIndex === 2 ? " focused-option" : "")}
                 >
                     <img className="menu-cover-img" src="/covers/crystal-castles-cover-3.jpg" alt="cover" />
-                    Crystal Castles |||
+                    Crystal Castles (|||)
                     {
                         this.props.albumsFilter[2] ?
                             <div style={{scale: "0.85", width: "1rem", display: "flex", marginRight: "0", backgroundColor: ""}}>

@@ -45,7 +45,6 @@ class Menu extends React.Component {
         if (!this.state.isSongsListShuffled) {
             const playlist = [...this.state.songs];
             playlist.sort(() => Math.random() - 0.5)
-            console.log("playlist: ", playlist)
             
             this.setState({ songs: [...playlist] })
         } else {
