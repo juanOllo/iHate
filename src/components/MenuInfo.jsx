@@ -6,7 +6,8 @@ class MenuInfo extends React.Component {
 
         return(
             <div id="menu-screen" className="menu-screen-info"
-                style={{marginTop: ("-" + (this.props.focusOptionIndex+1.7)*10 + "%")}}
+                style={{marginTop: ("-" + (this.props.focusOptionIndex+1.7)*11 + "%")}}
+                // style={{marginTop: ("-" + (3.7 + (this.props.focusOptionIndex)) + "rem")}}
             >
                 <h3>About Crystal Castles</h3>
 

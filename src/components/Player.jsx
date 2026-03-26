@@ -18,6 +18,8 @@ class Aparato extends React.Component {
 
             songsListDisplay: false,
             songListIndex: 0,
+
+            coverUrl: null,
         }
     }
 
@@ -33,7 +35,19 @@ class Aparato extends React.Component {
         });
 
         audio.addEventListener("ended", () => {
-            this.playNextSong();
+            // Si se termina la ultima canción de la lista vuelve al menú
+            if (this.getIndexOfCurrentSong() >= this.props.songs.length-1) {
+                this.props.updateLastSongPlayed(null, 0);
+                this.pauseSong();
+                this.props.closePlayer();
+                
+            } else {
+                this.playNextSong();
+            }
+        })
+
+        this.setState({
+            coverUrl: this.props.lastSongPlayed?.album_cover || this.props.songs[0].album_cover
         })
 
         this.playSong(this.props.songs.indexOf(this.props.lastSongPlayed) || 0);
@@ -41,7 +55,7 @@ class Aparato extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (prevState.currentSong !== this.state.currentSong) {
-            const nuevoIndice = this.props.songs.indexOf(this.state.currentSong);
+            const nuevoIndice = this.getIndexOfCurrentSong();
 
             if (nuevoIndice !== this.state.songListIndex) {
                 this.setState({ songListIndex: nuevoIndice });
@@ -99,57 +113,61 @@ class Aparato extends React.Component {
     playNextSong(){
         if (!this.state.currentSong) {
             return;
-        } else if (this.props.songs.indexOf(this.state.currentSong) < (this.props.songs.length - 1)) {
+        } else if (this.getIndexOfCurrentSong() < (this.props.songs.length - 1)) {
 
             // La animacion de cambio de portada solo se hace cuando cambio de album
-            if (this.state.currentSong.album !== this.props.songs[this.GetIndexOfCurrentSong()+1].album) {
+            if (this.state.currentSong.album !== this.props.songs[this.getIndexOfCurrentSong()+1].album) {
+                this.setState({
+                    currentSongCurrentTime: 0,
+                }, () => {
+                    this.playSong(this.getIndexOfCurrentSong() + 1);
+                })
+
                 const cover = document.getElementById("screen-cover");
                 cover.style.animation = "screen-cover-disappear-to-left 0.5s ease-in-out 0s forwards";
                 setTimeout(() => {
                     this.setState({
-                        currentSongCurrentTime: 0,
-                    }, () => {
-                        this.playSong(this.props.songs.indexOf(this.state.currentSong) + 1);
-                        cover.style.animation = "screen-cover-appear-from-right 0.5s ease-in-out 0.15s forwards";
+                        coverUrl: this.state.currentSong.album_cover
                     })
+                    cover.style.animation = "screen-cover-appear-from-right 0.5s ease-in-out 0.15s forwards";
                 }, 500);
                 
             } else {
-                setTimeout(() => {
-                    this.setState({
-                        currentSongCurrentTime: 0,
-                    }, () => {
-                        this.playSong(this.props.songs.indexOf(this.state.currentSong) + 1);
-                    })
-                }, 500);
+                this.setState({
+                    currentSongCurrentTime: 0,
+                }, () => {
+                    this.playSong(this.getIndexOfCurrentSong() + 1);
+                })
             }
         }
     }
 
     playPrevSong(){
-        if (this.audio.currentTime < 10 && this.props.songs.indexOf(this.state.currentSong) > 0) {
+        if (this.audio.currentTime < 10 && this.getIndexOfCurrentSong() > 0) {
 
             // La animacion de cambio de portada solo se hace cuando cambio de album
-            if (this.state.currentSong.album !== this.props.songs[this.GetIndexOfCurrentSong()-1].album) {
+            if (this.state.currentSong.album !== this.props.songs[this.getIndexOfCurrentSong()-1].album) {
+                this.setState({
+                    currentSongCurrentTime: 0,
+                }, () => {
+                    this.playSong(this.getIndexOfCurrentSong() - 1);
+                })
+
                 const cover = document.getElementById("screen-cover");
                 cover.style.animation = "screen-cover-disappear-to-right 0.5s ease-in-out 0s forwards";
                 setTimeout(() => {
                     this.setState({
-                        currentSongCurrentTime: 0,
-                    }, () => {
-                        this.playSong(this.props.songs.indexOf(this.state.currentSong) - 1);
-                        cover.style.animation = "screen-cover-appear-from-left 0.5s ease-in-out 0.15s forwards";
+                        coverUrl: this.state.currentSong.album_cover
                     })
+                    cover.style.animation = "screen-cover-appear-from-left 0.5s ease-in-out 0.15s forwards";
                 }, 500);
                 
             } else {
-                setTimeout(() => {
-                    this.setState({
-                        currentSongCurrentTime: 0,
-                    }, () => {
-                        this.playSong(this.props.songs.indexOf(this.state.currentSong) - 1);
-                    })
-                }, 500);
+                this.setState({
+                    currentSongCurrentTime: 0,
+                }, () => {
+                    this.playSong(this.getIndexOfCurrentSong() - 1);
+                })
             }
 
         } else {
@@ -169,7 +187,7 @@ class Aparato extends React.Component {
 
     }
 
-    GetIndexOfCurrentSong(){
+    getIndexOfCurrentSong(){
         return this.props.songs.indexOf(this.state.currentSong);
     }
 
@@ -180,7 +198,8 @@ class Aparato extends React.Component {
                     {
                         this.state.currentSong ?
                             <PlayerScreen
-                                cover={this.state.currentSong.album_cover}
+                                // cover={this.state.currentSong.album_cover}
+                                cover={this.state.coverUrl}
                                 currentSongCurrentTime={this.state.currentSongCurrentTime}
                                 duration={this.audio.duration}
                                 title={this.state.currentSong?.title}
@@ -206,7 +225,7 @@ class Aparato extends React.Component {
                                 setTimeout(() => {
                                     this.setState({ 
                                         songsListDisplay: !this.state.songsListDisplay,
-                                        songListIndex: this.props.songs.indexOf(this.state.currentSong),
+                                        songListIndex: this.getIndexOfCurrentSong(),
                                     })
                                 }, 310);
                             } else {
@@ -269,11 +288,40 @@ class Aparato extends React.Component {
                                 }, 310);
 
                                 // Evita la seleccion de la cancion actual
-                                if (this.state.songListIndex !== this.props.songs.indexOf(this.state.currentSong)) {
+                                if (this.state.songListIndex !== this.getIndexOfCurrentSong()) {
+
+
+                                    const oldIndex = this.getIndexOfCurrentSong();
+
                                     this.setState({ 
                                         currentSongCurrentTime: 0,
+                                        // coverUrl: this.props.songs[this.state.songListIndex].album_cover
                                     }, () => {
                                         this.playSong(this.state.songListIndex);
+
+                                        if (this.props.songs[this.state.songListIndex].album !== this.props.songs[oldIndex].album) {
+                                            if (this.state.songListIndex > oldIndex) {
+                                                const cover = document.getElementById("screen-cover");
+                                                cover.style.animation = "screen-cover-disappear-to-left 0.5s ease-in-out 0s forwards";
+                                                setTimeout(() => {
+                                                    this.setState({
+                                                        coverUrl: this.state.currentSong.album_cover
+                                                    })
+                                                    cover.style.animation = "screen-cover-appear-from-right 0.5s ease-in-out 0.15s forwards";
+                                                }, 500);
+
+                                            } else {
+                                                const cover = document.getElementById("screen-cover");
+                                                cover.style.animation = "screen-cover-disappear-to-right 0.5s ease-in-out 0s forwards";
+                                                setTimeout(() => {
+                                                    this.setState({
+                                                        coverUrl: this.state.currentSong.album_cover
+                                                    })
+                                                    cover.style.animation = "screen-cover-appear-from-left 0.5s ease-in-out 0.15s forwards";
+                                                }, 500);
+
+                                            }
+                                        }
                                     })
                                 }
 
@@ -299,13 +347,13 @@ class Aparato extends React.Component {
                                 setTimeout(() => {
                                     this.setState({ 
                                         songsListDisplay: !this.state.songsListDisplay,
-                                        songListIndex: this.props.songs.indexOf(this.state.currentSong),
+                                        songListIndex: this.getIndexOfCurrentSong(),
                                     })
                                 }, 310);
                             } else {
                                 this.setState({ 
                                     songsListDisplay: !this.state.songsListDisplay,
-                                    songListIndex: this.props.songs.indexOf(this.state.currentSong),
+                                    songListIndex: this.getIndexOfCurrentSong(),
                                 })
                             }
                         }}
