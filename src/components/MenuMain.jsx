@@ -43,6 +43,11 @@ class MenuMain extends React.Component {
                 >Info
                     <div> {">"} </div>
                 </div>
+                <div className={"menu-options" + (this.props.focusOptionIndex === 4 ? " focused-option" : "")}
+                    style={{color: "white"}}
+                >By: juanOllo
+                    <div> {">"} </div>
+                </div>
             </div>
         )
     }

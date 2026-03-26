@@ -14,6 +14,37 @@
     /* animation: menu-screen-appear 0.5s ease-in-out 0s forwards; */
 }
 
+.menu-screen-info{
+    width: 100%;
+    /* height: 100%; */
+    height: fit-content;
+    background-color: white;
+    scale: 0.90;
+
+    display: flex;
+    flex-direction: column;
+    /* justify-content: start; */
+    /* align-items: center; */
+    /* gap: 1rem; */
+
+    text-align: start;
+}
+
+.menu-screen-info *{
+    margin: 0;
+    padding: 0.5rem;
+}
+
+.menu-screen-info li{
+    padding: 0.3rem;
+    transform: translate(0.7rem, 0);
+    margin-bottom: 0.3rem;
+}
+
+.menu-screen-info h4{
+    margin-top: 0.8rem;
+}
+
 @keyframes menu-screen-appear {
     100%{
         opacity: 1;

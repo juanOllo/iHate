@@ -5,11 +5,11 @@ class Aparato extends React.Component {
     constructor(props) {
         super(props);
 
-        this.audioRef = React.createRef();
+        this.audio = this.props.audio;
 
         this.state={
             // audio: new Audio(),
-            audio: this.props.audio,
+            // audio: this.props.audio,
             currentSong: null,
             currentSongCurrentTime: this.props.lastSongPlayedCurrentTime || 0,
             // currentSongCoverIndex: this.props.lastSongPlayed?.album-1 || this.props.songs[0].album-1 || 0,
@@ -22,7 +22,7 @@ class Aparato extends React.Component {
     }
 
     componentDidMount() {
-        const audio = this.state.audio;
+        const audio = this.audio;
 
         audio.addEventListener("timeupdate", () => {
             this.setState({ currentSongCurrentTime: audio.currentTime });
@@ -49,21 +49,17 @@ class Aparato extends React.Component {
         }
     }
 
-    // handleTimeUpdate = () => {
-    //     this.setState({ currentSongCurrentTime: this.audioRef.current.currentTime });
-    // };
-
-    // handleLoadedMetadata = () => {
-    //     this.setState({ duration: this.audioRef.current.duration });
-    // };
-
     handleSeek = (e) => {
         const newTime = e.target.value;
-        // this.audioRef.current.currentTime = newTime;
-        this.state.audio.currentTime = newTime;
-        this.setState({ currentSongCurrentTime: newTime });
+        this.audio.currentTime = newTime;
+        this.setState({ currentSongCurrentTime: newTime }, 
+            () => {
+                if (!this.state.isPlayingSong) {
+                    this.setState({isPlayingSong: true})
+                }
+            }
+        );
     };
-
 
     playSong(index){
         if (this.props.songs.length <= 0 || index >= this.props.songs.length) { return; }
@@ -76,7 +72,7 @@ class Aparato extends React.Component {
             currentSong = this.props.songs[0];
         } 
 
-        const audio = this.state.audio;
+        const audio = this.audio;
         audio.src = currentSong.src;
         audio.currentTime = this.state.currentSongCurrentTime || 0;
 
@@ -94,42 +90,68 @@ class Aparato extends React.Component {
     pauseSong(){
         this.setState({
             isPlayingSong: false,
-            currentSongCurrentTime:this.state.audio.currentTime,
+            currentSongCurrentTime:this.audio.currentTime,
         })
 
-        this.state.audio.pause();
+        this.audio.pause();
     }
 
     playNextSong(){
         if (!this.state.currentSong) {
             return;
         } else if (this.props.songs.indexOf(this.state.currentSong) < (this.props.songs.length - 1)) {
-            const cover = document.getElementById("screen-cover");
-            cover.style.animation = "screen-cover-disappear-to-left 0.5s ease-in-out 0s forwards";
-            setTimeout(() => {
-                this.setState({
-                    currentSongCurrentTime: 0,
-                }, () => {
-                    this.playSong(this.props.songs.indexOf(this.state.currentSong) + 1);
-                    cover.style.animation = "screen-cover-appear-from-right 0.5s ease-in-out 0.15s forwards";
-                })
-            }, 500);
+
+            // La animacion de cambio de portada solo se hace cuando cambio de album
+            if (this.state.currentSong.album !== this.props.songs[this.GetIndexOfCurrentSong()+1].album) {
+                const cover = document.getElementById("screen-cover");
+                cover.style.animation = "screen-cover-disappear-to-left 0.5s ease-in-out 0s forwards";
+                setTimeout(() => {
+                    this.setState({
+                        currentSongCurrentTime: 0,
+                    }, () => {
+                        this.playSong(this.props.songs.indexOf(this.state.currentSong) + 1);
+                        cover.style.animation = "screen-cover-appear-from-right 0.5s ease-in-out 0.15s forwards";
+                    })
+                }, 500);
+                
+            } else {
+                setTimeout(() => {
+                    this.setState({
+                        currentSongCurrentTime: 0,
+                    }, () => {
+                        this.playSong(this.props.songs.indexOf(this.state.currentSong) + 1);
+                    })
+                }, 500);
+            }
         }
     }
 
     playPrevSong(){
-        if (this.state.audio.currentTime < 10 && this.props.songs.indexOf(this.state.currentSong) > 0) {
-            const cover = document.getElementById("screen-cover");
+        if (this.audio.currentTime < 10 && this.props.songs.indexOf(this.state.currentSong) > 0) {
+
+            // La animacion de cambio de portada solo se hace cuando cambio de album
+            if (this.state.currentSong.album !== this.props.songs[this.GetIndexOfCurrentSong()-1].album) {
+                const cover = document.getElementById("screen-cover");
                 cover.style.animation = "screen-cover-disappear-to-right 0.5s ease-in-out 0s forwards";
-            setTimeout(() => {
-                this.setState({
-                    currentSongCurrentTime: 0,
-                }, () => {
-                    this.playSong(this.props.songs.indexOf(this.state.currentSong) - 1);
-                    cover.style.animation = "screen-cover-appear-from-left 0.5s ease-in-out 0.15s forwards";
-                })
-            }, 500);
-            
+                setTimeout(() => {
+                    this.setState({
+                        currentSongCurrentTime: 0,
+                    }, () => {
+                        this.playSong(this.props.songs.indexOf(this.state.currentSong) - 1);
+                        cover.style.animation = "screen-cover-appear-from-left 0.5s ease-in-out 0.15s forwards";
+                    })
+                }, 500);
+                
+            } else {
+                setTimeout(() => {
+                    this.setState({
+                        currentSongCurrentTime: 0,
+                    }, () => {
+                        this.playSong(this.props.songs.indexOf(this.state.currentSong) - 1);
+                    })
+                }, 500);
+            }
+
         } else {
             this.setState({
                 currentSongCurrentTime: 0,
@@ -147,6 +169,10 @@ class Aparato extends React.Component {
 
     }
 
+    GetIndexOfCurrentSong(){
+        return this.props.songs.indexOf(this.state.currentSong);
+    }
+
     render(){
         return(
             <div className="aparato">
@@ -156,7 +182,7 @@ class Aparato extends React.Component {
                             <PlayerScreen
                                 cover={this.state.currentSong.album_cover}
                                 currentSongCurrentTime={this.state.currentSongCurrentTime}
-                                duration={this.state.audio.duration}
+                                duration={this.audio.duration}
                                 title={this.state.currentSong?.title}
                                 handleSeek={this.handleSeek}
 
@@ -196,6 +222,8 @@ class Aparato extends React.Component {
                             if (this.state.songsListDisplay) {
                                 if (this.state.songListIndex > 0) {
                                     this.setState({ songListIndex: this.state.songListIndex - 1})                                
+                                } else {
+                                    this.setState({ songListIndex: this.props.songs.length - 1})                                
                                 }
                             } else {
                                 this.playPrevSong()
@@ -214,6 +242,8 @@ class Aparato extends React.Component {
                             if (this.state.songsListDisplay) {
                                 if (this.state.songListIndex < this.props.songs.length-1) {
                                     this.setState({ songListIndex: this.state.songListIndex + 1})      
+                                } else {
+                                    this.setState({ songListIndex: 0})      
                                 }
                             } else {
                                 this.playNextSong()

@@ -1,10 +1,11 @@
 .aparato{
     background-color: gray;
-    margin-left: 50svw;
-    transform: translate(-50%, 0);
+    /* margin-left: 50svw; */
+    transform: translate(calc(50svw - 50%), calc(50svh - 50%));
     border-radius: 1.5rem;
 
     height: 100svh;
+    max-height: 46rem;
     width: 25rem;
     max-width: 100svw;
 
@@ -277,7 +278,7 @@
     /* margin-top: -5rem; */
     position: relative;
     top: -11rem;
-    left: 7rem;
+    left: 6.8rem;
     /* background-color: red; */
 }
 
@@ -303,7 +304,7 @@
 
 .player-songs-list{
     width: 10rem;
-    height: 20rem;
+    /* height: 20rem; */
     position: relative;
     background-color: transparent;
     /* margin-top: -20.3rem; */

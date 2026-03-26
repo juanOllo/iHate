@@ -2,6 +2,7 @@ import React from "react";
 import Player from "./Player.jsx"
 import MenuMain from "./MenuMain.jsx";
 import MenuSelectAlbums from "./MenuSelectAlbums.jsx";
+import MenuInfo from "./MenuInfo.jsx";
 import dataSongs from "../data/songs.js";
 
 
@@ -21,7 +22,7 @@ class Menu extends React.Component {
             actualMenuIndex: 0,
 
             albumsFilter: [true, true, true],
-            top: 3, //Cambiar nombre
+            top: 4, //Cambiar nombre
 
             lastSongPlayed: null,
             lastSongPlayedCurrentTime: 0,
@@ -92,7 +93,11 @@ class Menu extends React.Component {
                         break;
 
                     case 3:
-                        this.setState({ actualMenuIndex: 2, focusOptionIndex: 0, top: 2 });
+                        this.setState({ actualMenuIndex: 2, focusOptionIndex: 0, top: 31 });
+                        break;
+
+                    case 4:
+                        window.location.href = "https://github.com/juanOllo";
                         break;
                 
                     default:
@@ -146,6 +151,11 @@ class Menu extends React.Component {
                         albumsFilter={this.state.albumsFilter}
                     />
 
+            case 2:
+                return <MenuInfo
+                        focusOptionIndex={this.state.focusOptionIndex}
+                    />
+
             default:
                 break;
         }
@@ -179,7 +189,7 @@ class Menu extends React.Component {
                 <div className="pad">
                     <button className="menu-btn"
                         
-                        onClick={() => this.setState({ actualMenuIndex: 0, focusOptionIndex: 0, top: 3 })}
+                        onClick={() => this.setState({ actualMenuIndex: 0, focusOptionIndex: 0, top: 4 })}
                     >MENU</button>
                     
                     <button className="prev-btn"
