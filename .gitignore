@@ -22,7 +22,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/src/temp
-/public/songs
-/public/covers
-/public/images
+# /public/songs
+# /public/covers
